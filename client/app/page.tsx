@@ -1,9 +1,10 @@
-import Image from "next/image";
+import Index from "@/pages/Index";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="bg-yellow-400">LockerRoom DAO</h1>
-    </div>
+    <>
+      <h2 className="bg-yellow-500">LOCKER DAO</h2>
+      <Index />
+    </>
   );
 }

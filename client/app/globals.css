@@ -1,1 +1,171 @@
 @import "tailwindcss";
+
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+  .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+  .logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+  }
+  
+  @keyframes logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) .logo {
+      animation: logo-spin infinite 20s linear;
+    }
+  }
+  
+  .card {
+    padding: 2em;
+  }
+  
+  .read-the-docs {
+    color: #888;
+  }
+
+  @layer base {
+    :root {
+      --background: 10 10% 4%; /* Dark command center */
+      --foreground: 0 0% 98%; /* Bright white text */
+  
+      --card: 10 10% 8%; /* Slightly lighter than background */
+      --card-foreground: 0 0% 98%;
+  
+      --popover: 10 10% 8%;
+      --popover-foreground: 0 0% 98%;
+  
+      --primary: 184 100% 50%; /* Neon blue */
+      --primary-foreground: 10 10% 4%;
+  
+      --secondary: 10 10% 15%; /* Command center gray */
+      --secondary-foreground: 0 0% 98%;
+  
+      --muted: 10 10% 15%;
+      --muted-foreground: 0 0% 65%;
+  
+      --accent: 184 100% 50%; /* Neon blue accent */
+      --accent-foreground: 10 10% 4%;
+  
+      --destructive: 0 84% 60%; /* Neon red */
+      --destructive-foreground: 0 0% 98%;
+  
+      --border: 10 10% 20%;
+      --input: 10 10% 15%;
+      --ring: 184 100% 50%;
+  
+      --radius: 0.75rem;
+  
+      --sidebar-background: 10 10% 6%;
+      --sidebar-foreground: 0 0% 95%;
+      --sidebar-primary: 184 100% 50%;
+      --sidebar-primary-foreground: 10 10% 4%;
+      --sidebar-accent: 10 10% 12%;
+      --sidebar-accent-foreground: 0 0% 95%;
+      --sidebar-border: 10 10% 20%;
+      --sidebar-ring: 184 100% 50%;
+    }
+  }
+  
+  @layer base {
+    * {
+      @apply border-border;
+    }
+  
+    body {
+      @apply bg-background text-foreground font-inter;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+  
+    h1, h2, h3, h4, h5, h6 {
+      @apply font-orbitron;
+    }
+  }
+  
+  @layer components {
+    .neon-border {
+      @apply border border-neon-blue;
+      box-shadow: 0 0 10px hsl(184, 100%, 50%);
+    }
+  
+    .neon-text {
+      color: hsl(184, 100%, 50%);
+      text-shadow: 0 0 10px currentColor;
+    }
+  
+    .command-card {
+      @apply bg-gradient-to-br from-command-center-800 to-command-center-700 border border-command-center-600 rounded-lg backdrop-blur-sm;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+  
+    .glow-button {
+      @apply relative overflow-hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .glow-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 245, 255, 0.3);
+    }
+    
+    .glow-button::before {
+      content: '';
+      @apply absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0;
+      transform: translateX(-100%);
+      transition: all 0.6s;
+    }
+    
+    .glow-button:hover::before {
+      @apply opacity-20;
+      transform: translateX(100%);
+    }
+  
+    .stadium-grid {
+      background-image: 
+        linear-gradient(rgba(0, 245, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+  
+    .data-stream {
+      @apply absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-neon-blue to-transparent;
+      animation: data-flow 3s linear infinite;
+    }
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--sidebar-background));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(184, 100%, 50%);
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ff1744; 
+  }
