@@ -1,11 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Home, FileText, Wallet, User, Users, Bell, ChevronLeft, LogOut, Menu } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  FileText,
+  Wallet,
+  User,
+  Users,
+  Bell,
+  ChevronLeft,
+  LogOut,
+  Menu,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const menuItems = [
   { icon: Home, label: "locker", active: true },
@@ -14,23 +26,28 @@ const menuItems = [
   { icon: Users, label: "members", active: false },
   { icon: Bell, label: "notifications", active: false, badge: 3 },
   { icon: User, label: "profile", active: false },
-]
+];
 
 export function Sidebar() {
-  const [expanded, setExpanded] = useState(true)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [expanded, setExpanded] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const { login, logout, ready, authenticated, user } = usePrivy();
 
   const toggleSidebar = () => {
-    setExpanded(!expanded)
-  }
+    setExpanded(!expanded);
+  };
 
   const toggleMobile = () => {
-    setMobileOpen(!mobileOpen)
-  }
+    setMobileOpen(!mobileOpen);
+  };
 
   const sidebar = (
     <motion.div
-      className={cn("h-screen bg-black border-r border-gray-800 flex flex-col", expanded ? "w-64" : "w-16")}
+      className={cn(
+        "h-screen bg-black border-r border-gray-800 flex flex-col",
+        expanded ? "w-64" : "w-16"
+      )}
       animate={{ width: expanded ? "16rem" : "4rem" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
@@ -51,11 +68,26 @@ export function Sidebar() {
           )}
         </AnimatePresence>
 
-        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="hidden md:flex">
-          <ChevronLeft className={cn("h-5 w-5 transition-transform", !expanded && "rotate-180")} />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="hidden md:flex"
+        >
+          <ChevronLeft
+            className={cn(
+              "h-5 w-5 transition-transform",
+              !expanded && "rotate-180"
+            )}
+          />
         </Button>
 
-        <Button variant="ghost" size="icon" onClick={toggleMobile} className="md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleMobile}
+          className="md:hidden"
+        >
           <Menu className="h-5 w-5" />
         </Button>
       </div>
@@ -65,13 +97,20 @@ export function Sidebar() {
           {menuItems.map((item, index) => (
             <motion.li key={index} whileHover={{ x: 5 }}>
               <Link
-                href={item.label}
+                href={`/${item.label}`}
                 className={cn(
-                  "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                  item.active ? "bg-neon-blue/10 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                  "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors relative",
+                  pathname === `/${item.label}`
+                    ? "bg-neon-blue/10 text-white"
+                    : "text-gray-400 hover:bg-gray-800 hover:text-white"
                 )}
               >
-                <item.icon className={cn("h-5 w-5 mr-3", item.active && "text-neon-blue")} />
+                <item.icon
+                  className={cn(
+                    "h-5 w-5 mr-3",
+                    pathname === `/${item.label}` && "text-neon-blue"
+                  )}
+                />
 
                 <AnimatePresence initial={false}>
                   {expanded && (
@@ -112,23 +151,22 @@ export function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-gray-800">
-        <a
-          href="#"
-          className="flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
-        >
-          <LogOut className="h-5 w-5 mr-3" />
-
           <AnimatePresence initial={false}>
             {expanded && (
-              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                Disconnect
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Button onClick={login} variant="outline" className="w-full">
+                  {ready && authenticated ? `Disconnect` : "Connect Wallet"}
+                </Button>
               </motion.span>
             )}
           </AnimatePresence>
-        </a>
       </div>
     </motion.div>
-  )
+  );
 
   return (
     <>
@@ -137,7 +175,12 @@ export function Sidebar() {
 
       {/* Mobile Sidebar */}
       <div className="md:hidden">
-        <Button variant="ghost" size="icon" onClick={toggleMobile} className="fixed top-4 left-4 z-50">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleMobile}
+          className="fixed top-4 left-4 z-50"
+        >
           <Menu className="h-5 w-5" />
         </Button>
 
@@ -166,5 +209,5 @@ export function Sidebar() {
         </AnimatePresence>
       </div>
     </>
-  )
+  );
 }
