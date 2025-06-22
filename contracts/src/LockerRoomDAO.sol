@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -23,7 +23,7 @@ contract LockerRoomDAO is Ownable {
         bool executed;
     }
 
-    uint256 public proposalFee = 1 ether; // 1 CHZ
+    uint256 public proposalFee = 1 ether;
     uint256 public votingPeriod = 3 days;
 
     uint256 public proposalCount;
@@ -37,7 +37,7 @@ contract LockerRoomDAO is Ownable {
     event Voted(uint256 proposalId, address voter, bool support);
     event Executed(uint256 proposalId);
 
-    constructor(address _pass, address _treasury) {
+    constructor(address _pass, address _treasury) Ownable(msg.sender) {
         pass = IPass(_pass);
         treasury = ITreasury(_treasury);
     }

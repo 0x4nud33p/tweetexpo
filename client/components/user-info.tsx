@@ -1,10 +1,18 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { User, Star, Award, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion";
+import { User, Star, Award, ChevronRight, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 export function UserInfo() {
+  const { ready, authenticated } = usePrivy();
+  const { wallets } = useWallets();
+
+  if (!ready || !authenticated) return null;
+
+  const walletAddress = wallets[0]?.address;
+
   return (
     <motion.div
       className="bg-black border border-neon-red rounded-lg p-4 neon-red-box"
@@ -19,10 +27,21 @@ export function UserInfo() {
 
       <div className="flex items-center mb-4">
         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-neon-red/30 to-neon-blue/30 flex items-center justify-center border border-neon-red/50">
-          <span className="text-xl font-bold">JD</span>
+          <span className="text-xl font-bold">DAO</span>
         </div>
         <div className="ml-3">
-          <div className="font-bold">0x71...3a4f</div>
+          <div className="font-bold">
+            {walletAddress
+              ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+              : "No wallet found"}
+              <button
+                className="ml-2 text-sm text-gray-400 hover:text-white transition-colors"
+                onClick={() => navigator.clipboard.writeText(walletAddress ?? "")}
+                disabled={!walletAddress}
+              >
+                <Copy className="inline h-4 w-4" />
+              </button>
+          </div>
           <div className="flex items-center">
             <span className="text-neon-red mr-1">Captain</span>
             <Star className="h-3 w-3 text-neon-red fill-neon-red" />
@@ -82,5 +101,5 @@ export function UserInfo() {
         </motion.div>
       </div>
     </motion.div>
-  )
+  );
 }

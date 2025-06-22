@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -9,7 +9,7 @@ contract DaoAccessPass is ERC721URIStorage, Ownable {
     uint256 public mintPrice = 5 ether; // 5 CHZ
     address public daoContract;
 
-    constructor() ERC721("LockerRoom DAO Pass", "LRDAO") {}
+    constructor() ERC721("LockerRoom DAO Pass", "LRDAO") Ownable(msg.sender) {}
 
     modifier onlyDAO() {
         require(msg.sender == daoContract, "Not DAO");
