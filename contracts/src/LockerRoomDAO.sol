@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -13,6 +13,7 @@ interface ITreasury {
 
 contract LockerRoomDAO is Ownable {
     struct Proposal {
+        uint256 id;
         string title;
         string description;
         uint256 amount;
@@ -23,30 +24,35 @@ contract LockerRoomDAO is Ownable {
         bool executed;
     }
 
-    uint256 public proposalFee = 1 ether;
+    uint256 public proposalFee = 1 ether; // 1 CHZ
     uint256 public votingPeriod = 3 days;
-
     uint256 public proposalCount;
-    mapping(uint256 => Proposal) public proposals;
-    mapping(uint256 => mapping(address => bool)) public hasVoted;
 
     IPass public pass;
     ITreasury public treasury;
 
-    event ProposalCreated(uint256 id, address proposer);
-    event Voted(uint256 proposalId, address voter, bool support);
-    event Executed(uint256 proposalId);
+    mapping(uint256 => Proposal) public proposals;
+    mapping(uint256 => mapping(address => bool)) public hasVoted;
+
+    event ProposalCreated(uint256 indexed id, address indexed proposer, string title);
+    event Voted(uint256 indexed proposalId, address indexed voter, bool support);
+    event Executed(uint256 indexed proposalId);
 
     constructor(address _pass, address _treasury) Ownable(msg.sender) {
         pass = IPass(_pass);
         treasury = ITreasury(_treasury);
     }
 
-    function createProposal(string calldata _title, string calldata _desc, uint256 _amount) external payable {
+    function createProposal(
+        string calldata _title,
+        string calldata _desc,
+        uint256 _amount
+    ) external payable {
         require(msg.value == proposalFee, "Pay fee");
         require(pass.balanceOf(msg.sender) > 0, "Not a DAO member");
 
-        proposals[proposalCount] = Proposal({
+        Proposal memory newProposal = Proposal({
+            id: proposalCount,
             title: _title,
             description: _desc,
             amount: _amount,
@@ -57,7 +63,8 @@ contract LockerRoomDAO is Ownable {
             executed: false
         });
 
-        emit ProposalCreated(proposalCount, msg.sender);
+        proposals[proposalCount] = newProposal;
+        emit ProposalCreated(proposalCount, msg.sender, _title);
         proposalCount++;
     }
 
@@ -77,7 +84,7 @@ contract LockerRoomDAO is Ownable {
 
     function executeProposal(uint256 _id) external {
         Proposal storage prop = proposals[_id];
-        require(block.timestamp > prop.deadline, "Too early");
+        require(block.timestamp > prop.deadline, "Voting still active");
         require(!prop.executed, "Already executed");
 
         if (prop.votesFor > prop.votesAgainst) {
@@ -86,5 +93,14 @@ contract LockerRoomDAO is Ownable {
 
         prop.executed = true;
         emit Executed(_id);
+    }
+
+    // Optional helper for UI: get all active proposals
+    function getAllProposals() external view returns (Proposal[] memory) {
+        Proposal[] memory all = new Proposal[](proposalCount);
+        for (uint256 i = 0; i < proposalCount; i++) {
+            all[i] = proposals[i];
+        }
+        return all;
     }
 }
