@@ -18,6 +18,8 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { ConnectButton } from "thirdweb/react";
+import { client } from "@/lib/client";
 
 const menuItems = [
   { icon: Home, label: "locker", active: true },
@@ -151,19 +153,23 @@ export function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-gray-800">
-          <AnimatePresence initial={false}>
-            {expanded && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Button onClick={login} variant="outline" className="w-full">
-                  {ready && authenticated ? `Disconnect` : "Connect Wallet"}
-                </Button>
-              </motion.span>
-            )}
-          </AnimatePresence>
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <ConnectButton
+                client={client}
+                appMetadata={{
+                  name: "LockerRoom",
+                  url: "http://localhost:3000",
+                }}
+              />
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -172,7 +178,6 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:block">{sidebar}</div>
-
       {/* Mobile Sidebar */}
       <div className="md:hidden">
         <Button

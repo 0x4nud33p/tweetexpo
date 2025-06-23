@@ -298,7 +298,7 @@ export default function Page() {
 
       {/* Filters and Search */}
       <motion.div
-        className="bg-black border border-gray-800 rounded-lg p-4 mb-6"
+        className="bg-black border border-gray-800 rounded-lg p-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -331,7 +331,7 @@ export default function Page() {
           </div>
 
           {/* Tier Filter */}
-          <div className="flex gap-2">
+          <div className="flex">
             {tiers.map((tier) => (
               <Button
                 key={tier}
