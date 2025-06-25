@@ -10,16 +10,14 @@ import {
   Users,
   Bell,
   ChevronLeft,
-  LogOut,
   Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { ConnectButton } from "thirdweb/react";
 import { client } from "@/lib/client";
+import { useRouter } from "next/router";
 
 const menuItems = [
   { icon: Home, label: "locker", active: true },
@@ -34,7 +32,7 @@ export function Sidebar() {
   const [expanded, setExpanded] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const { login, logout, ready, authenticated, user } = usePrivy();
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setExpanded(!expanded);
@@ -98,8 +96,8 @@ export function Sidebar() {
         <ul className="space-y-2 px-2">
           {menuItems.map((item, index) => (
             <motion.li key={index} whileHover={{ x: 5 }}>
-              <Link
-                href={`/${item.label}`}
+              <Button
+                onClick={() => router.push(`/${item.label}`)}
                 className={cn(
                   "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors relative",
                   pathname === `/${item.label}`
@@ -146,7 +144,7 @@ export function Sidebar() {
                     transition={{ type: "spring", stiffness: 500, damping: 20 }}
                   />
                 )}
-              </Link>
+              </Button>
             </motion.li>
           ))}
         </ul>
