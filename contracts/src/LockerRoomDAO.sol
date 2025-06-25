@@ -24,7 +24,7 @@ contract LockerRoomDAO is Ownable {
         bool executed;
     }
 
-    uint256 public proposalFee = 1 ether; // 1 CHZ
+    uint256 public proposalFee = 0.05 ether; // 1 CHZ
     uint256 public votingPeriod = 3 days;
     uint256 public proposalCount;
 

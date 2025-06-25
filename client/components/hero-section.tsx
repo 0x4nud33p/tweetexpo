@@ -1,10 +1,15 @@
 "use client"
 
+import React from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { PlusCircle, Eye } from "lucide-react"
+import CreateProposalModal from "./create-proposol-modal"
 
 export function HeroSection() {
+
+  const [proposalModalOpen, setProposalModalOpen] = React.useState(false)
+  const closeProposalModal = () => setProposalModalOpen(false)
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -12,6 +17,14 @@ export function HeroSection() {
       transition={{ duration: 0.5 }}
       className="stadium-tunnel-bg relative h-[50vh] min-h-[400px] flex flex-col items-center justify-center px-4 overflow-hidden"
     >
+      {
+        proposalModalOpen && (
+          <CreateProposalModal
+            isOpen={proposalModalOpen}
+            onClose={closeProposalModal}
+          />
+        )
+      }
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80 z-0"></div>
 
       <div className="grid-pattern absolute inset-0 z-0"></div>
@@ -45,7 +58,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          <Button variant="neon-green" size="lg">
+          <Button variant="neon-green" size="lg" onClick={() => setProposalModalOpen(true)}>
             <PlusCircle className="mr-2 h-5 w-5" />
             Create Proposal
           </Button>
