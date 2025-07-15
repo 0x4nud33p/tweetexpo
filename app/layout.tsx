@@ -1,44 +1,32 @@
-import type React from "react";
-import type { Metadata } from "next";
-import { Inter, Orbitron } from "next/font/google";
-import "./globals.css";
-import { Sidebar } from "@/components/sidebar";
-import PrivyProviderClient from "@/providers/PrivyProvider";
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { Space_Grotesk } from "next/font/google";
+import { ThemeProvider } from '@/components/theme-provider';
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const orbitron = Orbitron({
-  subsets: ["latin"],
-  variable: "--font-orbitron",
-});
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "LockerRoom DAO",
-  description: "Run your favorite team like a DAO",
-  generator: "v0.dev",
+  title: 'dTwitter - Decentralized Social Network',
+  description: 'A decentralized Twitter built on Solana blockchain',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${inter.variable} ${orbitron.variable} font-sans bg-black text-white min-h-screen`}
-      >
-        <PrivyProviderClient>
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
-      </PrivyProviderClient>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${spaceGrotesk.className}`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
