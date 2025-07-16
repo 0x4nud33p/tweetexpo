@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Bell, Settings } from "lucide-react";
+import { Search, Bell, Settings, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -19,9 +19,7 @@ export function Navbar() {
           whileHover={{ scale: 1.05 }}
           className="flex items-center space-x-2"
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-green-400 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">dT</span>
-          </div>
+          <Hash className="text-white font-bold text-sm p-0" />
           <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-green-500 bg-clip-text text-transparent">
             dTwitter
           </span>
