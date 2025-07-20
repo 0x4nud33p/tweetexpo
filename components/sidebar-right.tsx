@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Wallet, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { StyledWalletButton } from "@/providers/wallet-provider"; 
+import { StyledWalletButton } from "@/providers/wallet-provider";
 import { useEffect, useState } from "react";
 import { ProfileSetupModal } from "./profile-setup-modal";
 
@@ -31,13 +31,14 @@ const trending = [
 
 export function SidebarRight() {
   const { connected, publicKey } = useWallet();
-  const [showProfileSetup, setShowProfileSetup] = useState(false);
+  const [showProfileSetupForFirstTime, setShowProfileSetupForFirstTime] =
+    useState(false);
 
   useEffect(() => {
-    if(connected && publicKey){
-      setShowProfileSetup(true);
+    if (connected && publicKey) {
+      setShowProfileSetupForFirstTime(true);
     }
-  },[publicKey])
+  }, [publicKey]);
 
   return (
     <>
@@ -57,16 +58,12 @@ export function SidebarRight() {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="w-full"
               >
                 {connected ? (
                   <StyledWalletButton />
                 ) : (
-                  <>
-                    <StyledWalletButton>
-                      <Wallet className="mr-2 h-4 w-4" />
-                      Connect Wallet
-                    </StyledWalletButton>
-                  </>
+                  <StyledWalletButton startIcon={<Wallet className="mr-2 h-4 w-4" />} />
                 )}
               </motion.div>
             </CardContent>
@@ -170,8 +167,8 @@ export function SidebarRight() {
         </motion.div>
       </motion.div>
       <ProfileSetupModal
-        isOpen={showProfileSetup}
-        onClose={() => setShowProfileSetup(false)}
+        isOpen={showProfileSetupForFirstTime}
+        onClose={() => setShowProfileSetupForFirstTime(false)}
         walletAddress={publicKey ? publicKey.toString() : ""}
       />
     </>

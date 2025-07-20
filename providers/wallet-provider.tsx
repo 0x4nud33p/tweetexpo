@@ -26,13 +26,14 @@ export const WalletButton = dynamic(
 
 export const StyledWalletButton: FC<{
   className?: string;
-  children?: ReactNode;
-}> = ({ className = "", children }) => {
+  startIcon?: React.ReactElement; 
+}> = ({ className = "", startIcon }) => {
   return (
     <WalletButton
+      startIcon={startIcon === null ? undefined : startIcon}
       className={`
         wallet-adapter-button-trigger
-        w-full h-12 rounded-xl 
+        w-full min-w-full h-12 rounded-xl
         bg-gradient-to-r from-purple-500 to-green-500 
         hover:from-purple-600 hover:to-green-600 
         text-white font-semibold shadow-lg
@@ -41,9 +42,7 @@ export const StyledWalletButton: FC<{
         flex items-center justify-center
         ${className}
       `}
-    >
-      {children}
-    </WalletButton>
+    />
   );
 };
 
