@@ -1,31 +1,34 @@
-'use client';
+'use client'
 
-import { Navbar } from '@/components/navbar';
-import { SidebarLeft } from '@/components/sidebar-left';
-import { SidebarRight } from '@/components/sidebar-right';
-import { Feed } from '@/components/feed';
-import { FloatingTweetButton } from '@/components/floating-tweet-button';
-import { motion } from 'framer-motion';
+import { useState } from 'react'
+import { Navbar } from '@/components/navbar'
+import { HeroSection } from '@/components/hero-section'
+import { TweetCard } from '@/components/tweet-card'
+import { fetchTweetData, TweetData } from '@/lib/api'
 
 export default function Home() {
+  const [tweetData, setTweetData] = useState<TweetData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleGenerate = async (url: string) => {
+    setIsLoading(true)
+    try {
+      const data = await fetchTweetData(url)
+      setTweetData(data)
+    } catch (error) {
+      console.error('Failed to fetch tweet data:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex"
-      >
-        <div className="hidden lg:block">
-          <SidebarLeft />
-        </div>
-        <Feed />
-        <div className="hidden xl:block">
-          <SidebarRight />
-        </div>
-      </motion.div>
-      <FloatingTweetButton />
+      <main>
+        <HeroSection onGenerate={handleGenerate} isLoading={isLoading} />
+        {tweetData && <TweetCard tweetData={tweetData} />}
+      </main>
     </div>
-  );
+  )
 }
